@@ -15,18 +15,35 @@ def get_crytocurrencies_from_api():
 
     raise Exception('Api Error')
 
-def get_hash():
-    pass
+def get_hash(value):
+    from hashlib import sha512
+    return sha512(value.encode('utf-8')).hexdigest()
 
-def first_element():
-    pass
+def first_element(elements):
+    return elements [0]
 
-def get_ticker_hash():
-    pass
+def get_ticker_hash(ticker_data):
+    from collections import OrdereDict
+    ticker_data = OrdereDict(
+        sorted(
+            ticker_data.items(),
+            key = first_element
+
+            )
+        )
+
+    ticker_value = ''
+
+    for _, value in ticker_data.items():
+        ticker_value += str(value)
+
+    return get_hash(ticker_value)
 
 
 def check_if_exists(db_connection, ticker_data):
-    pass
+    if db_connection.tickers.find_one({'ticker_hash':'s'}):
+        return True
+    return False
 
 def save_ticket(db_connection, ticker_data = None):
     if not ticker_data:
