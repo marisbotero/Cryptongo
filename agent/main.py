@@ -41,7 +41,8 @@ def get_ticker_hash(ticker_data):
 
 
 def check_if_exists(db_connection, ticker_data):
-    if db_connection.tickers.find_one({'ticker_hash':'s'}):
+    ticker_hash = get_ticker_hash(ticker_data)
+    if db_connection.tickers.find_one({'ticker_hash':ticker_hash}):
         return True
     return False
 
@@ -51,5 +52,17 @@ def save_ticket(db_connection, ticker_data = None):
 
     if check_if_exists(db_connection, ticker_data):
         return  False
+    
+    ticker_hash = get_ticker_hash(ticker_data)
+    ticker_data['ticker_hash'] = ticker_hash
+    ticker_data ['rank'] = int(ticker_data['rank'])
+    ticker_data['last_updated']= int(ticker_data['last_updated'])
+
+    db_connection.tickers.insert_one(ticker_data)
+
+    return True
+
+
+
 
 
