@@ -66,3 +66,5 @@ def save_ticket(db_connection, ticker_data = None):
 
 
 
+if __name__ == '__main__':
+    
